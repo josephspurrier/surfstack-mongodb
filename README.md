@@ -11,7 +11,7 @@ MongoDB library in PHP
 
 Instructions
 ===================
-// Create a new PHP file called Test.php and add this:
+Create a new PHP file called Test.php and add this:
 
     // Add the namespace
     namespace SurfStack\MongoDB;
@@ -38,15 +38,17 @@ Instructions
     }
 
 
-// Then create an index.php file and add this:
+Then create an index.php file and add this:
 
-  // To start using the library, include each PHP file in your application:
-  require_once 'ConnectionInfo.php';
-  require_once 'Driver.php';
-  require_once 'FindModifyOptions.php';
-  require_once 'ReturnStatus.php';
-  
-  // Create an instance of the class
-  $db = new \SurfStack\MongoDB\Test();
-  // Add a record to the database
-  $db->add();
+    // To start using the library, include each PHP file in your application:
+    require_once 'ConnectionInfo.php';
+    require_once 'Driver.php';
+    require_once 'FindModifyOptions.php';
+    require_once 'ReturnStatus.php';
+    
+    // Create an instance of the class
+    $db = new \SurfStack\MongoDB\Test();
+    // Add a record to the database
+    $db->add();
+    
+Run the file and you will have a new record in your database.
