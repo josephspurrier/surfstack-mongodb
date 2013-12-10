@@ -44,6 +44,7 @@ Then create an index.php file and add this:
     require_once 'ConnectionInfo.php';
     require_once 'Driver.php';
     require_once 'FindModifyOptions.php';
+    require_once 'Options.php';
     require_once 'ReturnStatus.php';
     
     // Create an instance of the class
