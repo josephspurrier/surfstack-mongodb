@@ -13,43 +13,132 @@ Instructions
 ===================
 Create a new PHP file called Test.php and add this:
 
-    // Add the namespace
-    namespace SurfStack\MongoDB;
-    
-    // Extend the Driver class
-    class Test extends Driver
-    {
-        // Set the name of the datbase
-        protected $database = 'test';
-        // Set the name of the collection
-        protected $collection = 'test1';
-        
-        // Create a method
-        function add()
-        {
-            // Test out the insert function
-            $this->insert(array(
-                '_id'=>new \MongoId(),
-                'first_name'=>'Foo',
-                'last_name'=>'Bar',
-                'creation_date'=>new \MongoDate(),
-            ));
-        }
-    }
+```php
+<?php
 
+// Add the namespace
+namespace SurfStack\MongoDB;
+
+// Extend the Driver class
+class Test extends Driver
+{
+    // Set the name of the datbase
+    protected $database = 'test';
+
+    // Set the name of the collection
+    protected $collection = 'test1';
+
+    // Added a record to the database
+    function write()
+    {
+        // Test out the insert function
+        $result = $this->insert(array(
+            '_id'=>new \MongoId(),
+            'first_name'=>'Foo',
+            'last_name'=>'Bar',
+            'creation_date'=>new \MongoDate(),
+        ));
+        
+        return $result;
+    }
+    
+    // Retrieve records from database
+    function read()
+    {
+        $result = $this->find(array(
+            'first_name'=>'Foo',
+        ));
+        
+        // Return Return_Status object
+        return $result;
+    }
+    
+    // Clear records from database
+    function clear()
+    {
+        // Set the options
+        $opt = new Options();
+        // Remove all
+        $opt->setJustOneDisabled();
+        
+        // Remove a single matching record
+        $result = $this->remove(array(
+            'first_name'=>'Foo',
+        ), $opt);
+        
+        // Return Return_Status object
+        return $result;
+    }
+}
+?>
+```
 
 Then create an index.php file and add this:
 
-    // To start using the library, include each PHP file in your application:
-    require_once 'ConnectionInfo.php';
-    require_once 'Driver.php';
-    require_once 'FindModifyOptions.php';
-    require_once 'Options.php';
-    require_once 'ReturnStatus.php';
-    
-    // Create an instance of the class
-    $db = new \SurfStack\MongoDB\Test();
-    // Add a record to the database
-    $db->add();
+```php
+<?php
+
+// To start using the library, include each PHP file in your application:
+require_once 'Connection_Info.php';
+require_once 'Driver.php';
+require_once 'Find_Modify_Options.php';
+require_once 'Options.php';
+require_once 'Return_Status.php';
+require_once 'Test.php';
+
+// Create an instance of the class
+$db = new \SurfStack\MongoDB\Test();
+
+// Add a record to the database
+$result = $db->write();
+
+// If record write was successful
+if ($result->isOk())
+{
+    echo 'Successfully wrote record to database.';
+}
+// Else the record write was not successful
+else
+{ 
+    echo 'Error writing record to database.';
+}
+
+// Write a line break
+echo nl2br(PHP_EOL);
+
+// Get all records from the database
+$result = $db->read();
+
+echo 'Found '.count($result).' records(s).';
+
+// Write a line break
+echo nl2br(PHP_EOL);
+
+// Output results
+foreach($result as $record)
+{
+    echo 'ID is '.$record['_id'].' for ';
+    echo $record['first_name'].' '.$record['last_name'];
+
+    // Write a line break
+    echo nl2br(PHP_EOL);
+}
+
+// Clear all matching records from the database
+$result = $db->clear();
+
+// If record delete was successful
+if ($result->getAffectedRecords())
+{
+    echo 'Successfully deleted '.$result->getAffectedRecords().' record(s) from database.';
+}
+// Else the record delete was not successful
+else
+{
+    echo 'No records deleted from the database.';
+}
+
+?>
+```
     
 Run the file and you will have a new record in your database.
