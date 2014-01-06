@@ -1,8 +1,9 @@
 surfstack-mongodb
 =================
 
-MongoDB library in PHP
+MongoDB library wrapper in PHP
 
+* Requires the [MongoDB PHP extension](http://www.php.net/manual/en/book.mongo.php)
 * All of the classes were created using information from here:
   http://www.php.net/manual/en/class.mongocollection.php
 * Driver.php is the main class
