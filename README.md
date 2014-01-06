@@ -10,7 +10,7 @@ MongoDB library in PHP
 * There are Options classes that make it easier to interact with the MongoDB functions 
 
 Instructions
-===================
+------------
 Create a new PHP file called Test.php and add this:
 
 ```php
