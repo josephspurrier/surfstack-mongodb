@@ -61,7 +61,7 @@ class Test extends Driver
         // Remove all
         $opt->setJustOneDisabled();
         
-        // Remove a single matching record
+        // Remove matching records
         $result = $this->remove(array(
             'first_name'=>'Foo',
         ), $opt);
@@ -141,4 +141,5 @@ else
 ?>
 ```
     
-Run the file and you will have a new record in your database.
+When you execute index.php, you'll add a new record to the database, retrieve
+it, and then delete it.
