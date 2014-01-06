@@ -1,14 +1,10 @@
 MongoDB library wrapper in PHP
 ==============================
 
-* There are two classes (Options and Find_Modify_Options) that ease the use of
-options in MongoDB operations
-* There is a class (Return_Status) that makes it easy to check whether a
-read or write operation succeeded as well as count the number of affected
-records
-
+* There are two classes (Options and Find_Modify_Options) that ease the use of options in MongoDB operations
+* There is a class (Return_Status) that makes it easy to check whether a read or write operation succeeded as well as count the number of affected records
 * Requires the [MongoDB PHP extension](http://www.php.net/manual/en/book.mongo.php)
-* Driver.php is the main class
+* Driver.php contains the main class
 * Driver is an abstract class so you'll need to extend it to use it
 * All of the classes were created using information from here:
   http://www.php.net/manual/en/class.mongocollection.php 
