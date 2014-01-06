@@ -3,14 +3,14 @@
  * MongoDB Return Status Handler
  *
  * @package SurfStack
- * @copyright Copyright (C) 2013 Joseph Spurrier. All rights reserved.
+ * @copyright Copyright (C) 2014 Joseph Spurrier. All rights reserved.
  * @author Joseph Spurrier (http://www.josephspurrier.com)
  * @license http://www.apache.org/licenses/LICENSE-2.0.html
  */
 
 namespace SurfStack\MongoDB;
 
-class ReturnStatus
+class Return_Status
 {
     private $arr;
     private $id;
@@ -64,8 +64,8 @@ class ReturnStatus
     function getNewID()
     {
         if (!is_null($this->id)) return $this->id;
-        else if (isset($this->arr['upserted'])) return new Mongoid($this->arr['upserted']);
-        else if (isset($this->arr['updatedExisting'])) return new Mongoid($this->arr['updatedExisting']);
+        else if (isset($this->arr['upserted'])) return new \MongoId($this->arr['upserted']);
+        else if (isset($this->arr['updatedExisting'])) return new \MongoId($this->arr['updatedExisting']);
         else return false;
     }
     

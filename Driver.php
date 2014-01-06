@@ -3,7 +3,7 @@
  * MongoDB library
  *
  * @package SurfStack
- * @copyright Copyright (C) 2013 Joseph Spurrier. All rights reserved.
+ * @copyright Copyright (C) 2014 Joseph Spurrier. All rights reserved.
  * @author Joseph Spurrier (http://www.josephspurrier.com)
  * @license http://www.apache.org/licenses/LICENSE-2.0.html
  */
@@ -47,14 +47,14 @@ abstract class Driver
         else if (!$this->collection) die('Must specify a protected $collection.');
         
         // Connect to database
-        $this->connectAnonymous(new ConnectionInfo());
+        $this->connectAnonymous(new Connection_Info());
     }
     
     /**
      * Connect to a locally secured MongoDB instance
-     * @param ConnectionInfo $ci
+     * @param Connection_Info $ci
      */
-    private function connectAnonymous(ConnectionInfo $ci)
+    private function connectAnonymous(Connection_Info $ci)
     {
         try
         {
@@ -105,10 +105,10 @@ abstract class Driver
      * @param array $query The fields for which to search
      * @param array $update The update query
      * @param array $fields Fields of the results to return
-     * @param FindModifyOptions $options Options for operation
+     * @param Find_Modify_Options $options Options for operation
      * @return array Returns the original document, or the modified document when new is set
      */
-    protected function findAndModify(array $query, array $update, array $fields=array(), FindModifyOptions $options=NULL)
+    protected function findAndModify(array $query, array $update, array $fields=array(), Find_Modify_Options $options=NULL)
     {
         // If verbose is enabled, kill the script on error
         if ($this->verbose)
@@ -118,7 +118,7 @@ abstract class Driver
         }
     
         // Update the options array
-        $options = (is_null($options) ? new FindModifyOptions() : $options);
+        $options = (is_null($options) ? new Find_Modify_Options() : $options);
     
         // Find/Modify
         $result = $this->connection->findAndModify($query, $update, $fields, $options->getArray());
@@ -151,7 +151,7 @@ abstract class Driver
         $result = $this->connection->insert($a, $options->getArray());
 
         // Set the status
-        $status = new ReturnStatus($result);
+        $status = new Return_Status($result);
         if (is_array($a) && isset($a['_id'])) $status->setId($a['_id']);
         
         // Return the status
@@ -182,7 +182,7 @@ abstract class Driver
         $result = $this->connection->save($a, $options->getArray());
     
         // Set the status
-        $status = new ReturnStatus($result);
+        $status = new Return_Status($result);
         if (is_array($a) && isset($a['_id'])) $status->setId($a['_id']);
     
         // Return the status
@@ -212,7 +212,7 @@ abstract class Driver
         $result = $this->connection->update($criteria, $new_object, $options->getArray());
     
         // Set the status
-        $status = new ReturnStatus($result);
+        $status = new Return_Status($result);
     
         // Return the status
         return $status;
@@ -233,7 +233,7 @@ abstract class Driver
         $result = $this->connection->remove($criteria, $options->getArray());
     
         // Set the status
-        $status = new ReturnStatus($result);
+        $status = new Return_Status($result);
         
         // Return the status
         return $status;

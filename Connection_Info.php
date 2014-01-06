@@ -3,14 +3,14 @@
  * MongoDB connection information
  *
  * @package SurfStack
- * @copyright Copyright (C) 2013 Joseph Spurrier. All rights reserved.
+ * @copyright Copyright (C) 2014 Joseph Spurrier. All rights reserved.
  * @author Joseph Spurrier (http://www.josephspurrier.com)
  * @license http://www.apache.org/licenses/LICENSE-2.0.html
  */
 
 namespace SurfStack\MongoDB;
 
-class ConnectionInfo
+class Connection_Info
 {
     private $port = \Mongo::DEFAULT_PORT;
     private $host = '127.0.0.1';
