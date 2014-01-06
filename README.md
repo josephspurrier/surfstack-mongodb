@@ -6,8 +6,7 @@ MongoDB library wrapper in PHP
 * Requires the [MongoDB PHP extension](http://www.php.net/manual/en/book.mongo.php)
 * Driver.php contains the main class
 * Driver is an abstract class so you'll need to extend it to use it
-* All of the classes were created using information from here:
-  http://www.php.net/manual/en/class.mongocollection.php 
+* All of the classes were created using information from the [PHP Manual](http://www.php.net/manual/en/class.mongocollection.php)
 
 Instructions
 ------------
