@@ -1,4 +1,4 @@
-MongoDB library wrapper in PHP
+MongoDB Library Wrapper in PHP
 ==============================
 
 * There are two classes (Options and Find_Modify_Options) that ease the use of options in MongoDB operations
