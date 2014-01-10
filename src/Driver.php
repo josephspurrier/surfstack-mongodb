@@ -27,10 +27,16 @@ abstract class Driver
      * @var bool
      */
     protected $verbose = true;
+
+    /**
+     * MongoDB connection
+     * @var MongoClient
+     */
+    private $db;
     
     /**
-     * Database connection
-     * @var MongoClient
+     * MongoDB collection
+     * @var MongoCollection
      */
     private $connection;
     
@@ -59,15 +65,26 @@ abstract class Driver
         try
         {
             // Establish a connection to the database
-            $this->connection = new \MongoClient($ci->getConnectionString());
+            $this->db = new \MongoClient($ci->getConnectionString());
             
             // Select the database and collection
-            $this->connection = $this->connection->selectCollection($this->database, $this->collection);
+            $this->connection = $this->db->selectCollection($this->database, $this->collection);
         }
         catch (\MongoConnectionException $e)
         {
             die('Could not connect to MongoDB.');
         }
+    }
+    
+    /**
+     * Select a new collection object
+     * @param string $database
+     * @param string $collection
+     */
+    protected function selectCollection($database, $collection)
+    {
+        // Select the database and collection
+        $this->connection = $this->db->selectCollection($database, $collection);
     }
 
     /**
