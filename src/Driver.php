@@ -82,7 +82,9 @@ abstract class Driver
         $result = $this->connection->find($query, $fields);
     
         // Return the results
-        return iterator_to_array($result);
+        if ($result == null || $result == false) return array();
+        // Return the array with integers as the keys
+        return iterator_to_array($result, false);
     }
     
     /**
@@ -97,7 +99,9 @@ abstract class Driver
         $result = $this->connection->findOne($query, $fields);
     
         // Return the results
-        return array($result);
+        if ($result == null || $result == false) return array();
+        // Return a single array
+        return $result;
     }
     
     /**
@@ -124,14 +128,16 @@ abstract class Driver
         $result = $this->connection->findAndModify($query, $update, $fields, $options->getArray());
     
         // Return the results
-        return array($result);
+        if ($result == null || $result == false) return array();
+        // Return a single array
+        return $result;
     }
     
     /**
      * Insert a document into the database
      * @param array|object $a An array or object
      * @param Options $options Options for operation
-     * @return bool|array 
+     * @return Return_Status Easy result object
      */
     protected function insert($a, Options $options=NULL)
     {        
@@ -162,7 +168,7 @@ abstract class Driver
      * Update an existing database object or insert this object
      * @param array|object $a An array or object
      * @param Options $options Options for operation
-     * @return bool|array
+     * @return Return_Status Easy result object
      */
     protected function save($a, Options $options=NULL)
     {
@@ -194,7 +200,7 @@ abstract class Driver
      * @param array $criteria An array description of the objects to update
      * @param array $new_object An array object with which to update the matching records
      * @param Options $options Options for operation
-     * @return bool|array
+     * @return Return_Status Easy result object
      */
     protected function update(array $criteria, array $new_object, Options $options=NULL)
     {
@@ -222,7 +228,7 @@ abstract class Driver
      * Remove a document from the database
      * @param array $criteria Description of records to remove
      * @param array $options Options for operation
-     * @return bool|array
+     * @return Return_Status Easy result object
      */
     protected function remove(array $criteria=array(), Options $options=NULL)
     {
