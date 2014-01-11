@@ -48,6 +48,12 @@ class Test extends Driver
     // Retrieve records from database
     function read()
     {
+    	// Set cursor options
+        $this->setLimit(0);
+        $this->setFields(array('_id'=>0));
+        $this->setSkip(0);
+        $this->setSort(array('first_name' => 1));
+    
         $result = $this->find(array(
             'first_name'=>'Foo',
         ));
