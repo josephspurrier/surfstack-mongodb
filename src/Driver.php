@@ -29,16 +29,22 @@ abstract class Driver
     protected $verbose = true;
 
     /**
-     * MongoDB connection
+     * MongoDB client
      * @var MongoClient
      */
-    private $db;
+    private $dbClient;
     
     /**
      * MongoDB collection
      * @var MongoCollection
      */
-    private $connection;
+    private $dbCollection;
+    
+    /**
+     * MongoDB instance
+     * @var MongoDB
+     */
+    private $dbInstance;
     
     function __construct()
     {
@@ -65,10 +71,10 @@ abstract class Driver
         try
         {
             // Establish a connection to the database
-            $this->db = new \MongoClient($ci->getConnectionString());
+            $this->dbClient = new \MongoClient($ci->getConnectionString());
             
             // Select the database and collection
-            $this->connection = $this->db->selectCollection($this->database, $this->collection);
+            $this->selectCollection($this->database, $this->collection);
         }
         catch (\MongoConnectionException $e)
         {
@@ -84,7 +90,8 @@ abstract class Driver
     protected function selectCollection($database, $collection)
     {
         // Select the database and collection
-        $this->connection = $this->db->selectCollection($database, $collection);
+        $this->dbCollection = $this->dbClient->selectCollection($database, $collection);
+        $this->dbInstance = $this->dbClient->{$database};
     }
 
     /**
@@ -96,7 +103,7 @@ abstract class Driver
     protected function find(array $query=array(), array $fields=array())
     {    
         // Find
-        $result = $this->connection->find($query, $fields);
+        $result = $this->dbCollection->find($query, $fields);
     
         // Return the results
         if ($result == null || $result == false) return array();
@@ -113,7 +120,7 @@ abstract class Driver
     protected function findOne(array $query=array(), array $fields=array())
     {
         // Find
-        $result = $this->connection->findOne($query, $fields);
+        $result = $this->dbCollection->findOne($query, $fields);
     
         // Return the results
         if ($result == null || $result == false) return array();
@@ -142,7 +149,7 @@ abstract class Driver
         $options = (is_null($options) ? new Find_Modify_Options() : $options);
     
         // Find/Modify
-        $result = $this->connection->findAndModify($query, $update, $fields, $options->getArray());
+        $result = $this->dbCollection->findAndModify($query, $update, $fields, $options->getArray());
     
         // Return the results
         if ($result == null || $result == false) return array();
@@ -171,7 +178,7 @@ abstract class Driver
         $options = (is_null($options) ? new Options() : $options);
         
         // Insert
-        $result = $this->connection->insert($a, $options->getArray());
+        $result = $this->dbCollection->insert($a, $options->getArray());
 
         // Set the status
         $status = new Return_Status($result);
@@ -202,7 +209,7 @@ abstract class Driver
         $options = (is_null($options) ? new Options() : $options);
     
         // Save
-        $result = $this->connection->save($a, $options->getArray());
+        $result = $this->dbCollection->save($a, $options->getArray());
     
         // Set the status
         $status = new Return_Status($result);
@@ -232,7 +239,7 @@ abstract class Driver
         $options = (is_null($options) ? new Options() : $options);
     
         // Update
-        $result = $this->connection->update($criteria, $new_object, $options->getArray());
+        $result = $this->dbCollection->update($criteria, $new_object, $options->getArray());
     
         // Set the status
         $status = new Return_Status($result);
@@ -253,12 +260,27 @@ abstract class Driver
         $options = (is_null($options) ? new Options() : $options);
         
         // Remove
-        $result = $this->connection->remove($criteria, $options->getArray());
+        $result = $this->dbCollection->remove($criteria, $options->getArray());
     
         // Set the status
         $status = new Return_Status($result);
         
         // Return the status
         return $status;
+    }
+
+    /**
+     * Fetches the object pointed to by a reference (same as MongoDBRef::get)
+     * @param array $ref Reference to fetch (array is actually a MongoDBRef)
+     * @return array Returns the document to which the reference refers or empty array if the document does not exist (the reference is broken).
+     */
+    protected function get(array $ref)
+    {
+        $result = \MongoDBRef::get($this->dbInstance, $ref);
+        
+        // Return the results
+        if ($result == null || $result == false) return array();
+        // Return a single array
+        return $result;
     }
 }
