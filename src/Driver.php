@@ -270,13 +270,14 @@ abstract class Driver
     }
 
     /**
-     * Fetches the object pointed to by a reference (same as MongoDBRef::get)
+     * Fetches the document pointed to by a database reference
      * @param array $ref Reference to fetch (array is actually a MongoDBRef)
      * @return array Returns the document to which the reference refers or empty array if the document does not exist (the reference is broken).
      */
-    protected function get(array $ref)
+    protected function getDBRef(array $ref)
     {
-        $result = \MongoDBRef::get($this->dbInstance, $ref);
+        // Get the database reference
+        $result = $this->dbCollection->getDBRef($ref);
         
         // Return the results
         if ($result == null || $result == false) return array();
