@@ -35,10 +35,10 @@ class Test extends Driver
     {
         // Test out the insert function
         $result = $this->insert(array(
-            '_id'=>new \MongoId(),
-            'first_name'=>'Foo',
-            'last_name'=>'Bar',
-            'creation_date'=>new \MongoDate(),
+            '_id' => new \MongoId(),
+            'first_name' => 'Foo',
+            'last_name' => 'Bar',
+            'creation_date' => new \MongoDate(),
         ));
         
         // Return Return_Status object
@@ -50,12 +50,12 @@ class Test extends Driver
     {
     	// Set cursor options
         $this->setLimit(0);
-        $this->setFields(array('_id'=>0));
+        $this->setFields(array('_id' => 0));
         $this->setSkip(0);
         $this->setSort(array('first_name' => 1));
     
         $result = $this->find(array(
-            'first_name'=>'Foo',
+            'first_name' => 'Foo',
         ));
         
         // Return Return_Status object
@@ -72,7 +72,7 @@ class Test extends Driver
         
         // Remove matching records
         $result = $this->remove(array(
-            'first_name'=>'Foo',
+            'first_name' => 'Foo',
         ), $opt);
         
         // Return Return_Status object
