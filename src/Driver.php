@@ -1,6 +1,6 @@
 <?php
 /**
- * MongoDB library
+ * MongoDB library wrapper
  *
  * @package SurfStack
  * @copyright Copyright (C) 2014 Joseph Spurrier. All rights reserved.
@@ -45,6 +45,12 @@ abstract class Driver
      * @var MongoDB
      */
     private $dbInstance;
+    
+    // MongoCursor default options
+    private $fields = array();
+    private $limit = 0;
+    private $skip = 0;
+    private $sort = array();
     
     function __construct()
     {
@@ -102,9 +108,15 @@ abstract class Driver
      */
     protected function find(array $query=array(), array $fields=array())
     {    
-        // Find
+        // Get the MongoCursor of results
         $result = $this->dbCollection->find($query, $fields);
-    
+        
+        // Set the MongoCursor options
+        $result->fields($this->fields);
+        $result->limit($this->limit);
+        $result->skip($this->skip);
+        $result->sort($this->sort);
+        
         // Return the results
         if ($result == null || $result == false) return array();
         // Return the array with integers as the keys
@@ -134,7 +146,8 @@ abstract class Driver
      * @param array $update The update query
      * @param array $fields Fields of the results to return
      * @param Find_Modify_Options $options Options for operation
-     * @return array Returns the original document, or the modified document when new is set
+     * @return array Returns the original document, or the modified document
+     * when new is set
      */
     protected function findAndModify(array $query, array $update, array $fields=array(), Find_Modify_Options $options=NULL)
     {
@@ -222,7 +235,8 @@ abstract class Driver
     /**
      * Update an existing database object
      * @param array $criteria An array description of the objects to update
-     * @param array $new_object An array object with which to update the matching records
+     * @param array $new_object An array object with which to update the
+     * matching records
      * @param Options $options Options for operation
      * @return Return_Status Easy result object
      */
@@ -239,7 +253,11 @@ abstract class Driver
         $options = (is_null($options) ? new Options() : $options);
     
         // Update
-        $result = $this->dbCollection->update($criteria, $new_object, $options->getArray());
+        $result = $this->dbCollection->update(
+            $criteria,
+            $new_object,
+            $options->getArray()
+        );
     
         // Set the status
         $status = new Return_Status($result);
@@ -272,7 +290,8 @@ abstract class Driver
     /**
      * Fetches the document pointed to by a database reference
      * @param array $ref Reference to fetch (array is actually a MongoDBRef)
-     * @return array Returns the document to which the reference refers or empty array if the document does not exist (the reference is broken).
+     * @return array Returns the document to which the reference refers or empty
+     * array if the document does not exist (the reference is broken)
      */
     protected function getDBRef(array $ref)
     {
@@ -284,4 +303,61 @@ abstract class Driver
         // Return a single array
         return $result;
     }
+    
+    /**
+     * Sets the fields for a query (MongoCursor)
+     * @param array $fields Fields to return (or not return)
+     */
+    protected function setFields(array $fields)
+    {
+        $this->fields = $fields;
+    }
+    
+    /**
+     * Limits the number of results returned (MongoCursor)
+     * @param int $num The number of results to return
+     */
+    protected function setLimit($num)
+    {
+        // If the number is an int
+        if (is_int($num))
+        {
+            $this->limit = $num;
+        }
+        // Else if verbose is enabled, kill the script on error
+        elseif ($this->verbose)
+        {
+            die('must be an instance of integer');
+        }
+    }
+    
+    /**
+     * Skips a number of results (MongoCursor)
+     * @param int $num The number of results to skip
+     */
+    protected function setSkip($num)
+    {
+        // If the number is an int
+        if (is_int($num))
+        {
+            $this->skip = $num;
+        }
+        // Else if verbose is enabled, kill the script on error
+        elseif ($this->verbose)
+        {
+            die('must be an instance of integer');
+        }
+    }
+    
+    /**
+     * Sorts the results by given fields (MongoCursor)
+     * @param array $sort An array of fields by which to sort. Each element in
+     * the array has as key the field name, and as value either 1 for ascending
+     * sort, or -1 for descending sort
+     */
+    protected function setSort(array $sort)
+    {
+        $this->sort = $sort;
+    }
+
 }
