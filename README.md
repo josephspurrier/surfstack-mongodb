@@ -8,6 +8,7 @@ SurfStack MongoDB Library Wrapper in PHP
 * All of the classes were created using information from the [PHP Manual](http://www.php.net/manual/en/class.mongocollection.php)
 
 Strengths:
+* Adds functionality not included in PHP extension: cloneCollection(), renameCollection()
 * Driver has no mixed-typed return values
 * Limits direct access to MongoDB objects
 
