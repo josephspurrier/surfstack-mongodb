@@ -37,6 +37,30 @@ class Return_Status
         else return false;
     }
     
+    /**
+     * Get the name of the dropped database
+     * Available when using:
+     * drop()
+     * @return string Name of the dropped database
+     */
+    function getDropped()
+    {
+        if (isset($this->arr['dropped'])) return $this->arr['dropped'];
+        else return '';
+    }
+    
+    /**
+     * Get the response
+     * Available when using:
+     * cloneCollection()
+     * @return string Return value
+     */
+    function getReturnValue()
+    {
+        if (isset($this->arr['retval'])) return $this->arr['retval'];
+        else return '';
+    }
+    
     function getAffectedRecords()
     {
         if (isset($this->arr['n'])) return (int)$this->arr['n'];

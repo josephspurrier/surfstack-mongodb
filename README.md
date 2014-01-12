@@ -39,6 +39,7 @@ class Test extends Driver
             'first_name' => 'Foo',
             'last_name' => 'Bar',
             'creation_date' => new \MongoDate(),
+            'binary_data' => new \MongoBinData('This is be anything', \MongoBinData::CUSTOM),
         ));
         
         // Return Return_Status object
@@ -58,7 +59,7 @@ class Test extends Driver
             'first_name' => 'Foo',
         ));
         
-        // Return Return_Status object
+        // Return array
         return $result;
     }
     
@@ -128,8 +129,14 @@ echo nl2br(PHP_EOL);
 foreach($result as $record)
 {
     echo 'ID is '.$record['_id'].' for ';
-    echo $record['first_name'].' '.$record['last_name'];
+    echo $record['first_name'].' '.$record['last_name']; 
 
+    // Write a line break
+    echo nl2br(PHP_EOL);
+    
+    echo 'Binary data: ';
+    echo $record['binary_data']->bin;
+    
     // Write a line break
     echo nl2br(PHP_EOL);
 }

@@ -12,6 +12,8 @@ namespace SurfStack\MongoDB;
 
 abstract class Driver
 {
+    //TODO: Analyze Return_Status for all functions
+    
     /**
      * Database name
      * @var string
@@ -360,4 +362,106 @@ abstract class Driver
         $this->sort = $sort;
     }
 
+    /**
+     * Lists all of the databases available
+     * @return Returns an associative array containing three fields. The first
+     * field is databases, which in turn contains an array. Each element of the
+     * array is an associative array corresponding to a database, giving the
+     * database's name, size, and if it's empty. The other two fields are
+     * totalSize (in bytes) and ok, which is 1 if this method ran successfully.
+     */
+    protected function listDBs()
+    {
+        return $this->dbClient->listDBs();
+    }
+    
+    /**
+     * Gets an array of all MongoCollections for this database
+     * @param bool $includeSystemCollections Include system collections
+     * @return array Returns an array of MongoCollection objects
+     */
+    protected function listCollections($includeSystemCollections = false)
+    {
+        return $this->dbInstance->listCollections($includeSystemCollections);
+    }
+    
+    /**
+     * Creates a collection
+     * @param string $name The name of the collection
+     * @param array $options An array containing options for the collections.
+     * Each option is its own element in the options array, with the option
+     * name listed below being the key of the element. The supported options
+     * depend on the MongoDB server version. See here for the options
+     * supported: http://www.php.net/manual/en/mongodb.createcollection.php
+     */
+    protected function createCollection($name, array $options = array())
+    {
+        return $this->dbInstance->createCollection($name, $options);
+    }
+    
+    /**
+     * Drops the current database
+     * @return Return_Status Returns object with: ok, dropped
+     */
+    protected function dropDatabase()
+    {
+        // Drop the database
+        $result = $this->dbInstance->drop();
+
+        // Set the status
+        $status = new Return_Status($result);
+        
+        // Return the status
+        return $status;
+    }
+    
+    /**
+     * Drops the current collection
+     * @return \SurfStack\MongoDB\Return_Status Returns object with: ok, errmsg
+     */
+    protected function dropCollection()
+    {
+        // Drop the database
+        $result = $this->dbCollection->drop();
+        
+        // Set the status
+        $status = new Return_Status($result);
+        
+        // Return the status
+        return $status;
+    }
+    
+    /**
+     * Clone a collection (collection to be cloned cannot be empty)
+     * @param string $oldName Old collection name
+     * @param string $newName New collection name
+     * @return \SurfStack\MongoDB\Return_Status Return_Status Returns object with: ok, retval
+     */
+    protected function cloneCollection($oldName, $newName)
+    {
+        $result = $this->dbInstance->execute('db.'.$oldName.'.find().forEach( function(x){db.'.$newName.'.insert(x)} );');
+        
+        // Set the status
+        $status = new Return_Status($result);
+        
+        // Return the status
+        return $status;
+    }
+
+    /**
+     * Renames a collection
+     * @param string $oldName Old collection name
+     * @param string $newName New collection name
+     * @return \SurfStack\MongoDB\Return_Status Return_Status Returns object with: ok, retval
+     */
+    protected function renameCollection($oldName, $newName)
+    {
+        $result = $this->dbInstance->execute('db.'.$oldName.'.renameCollection("'.$newName.'");');
+        
+        // Set the status
+        $status = new Return_Status($result);
+        
+        // Return the status
+        return $status;
+    }
 }
