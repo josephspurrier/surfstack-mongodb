@@ -604,4 +604,17 @@ abstract class Driver
         // Return an object
         return $result;
     }
+   
+    /**
+     * Counts the number of documents in this collection
+     * @param array $query Associative array or object with fields to match
+     * @param number $limit Specifies an upper limit to the number returned
+     * @param number $skip Specifies a number of results to skip before starting the count
+     * @return number Returns the number of documents matching the query
+     */
+    protected function count(array $query = array(), $limit = 0, $skip = 0)
+    {
+        // Count the number of document in the collection        
+        return $this->dbCollection->count($query, $limit, $skip);
+    }
 }
