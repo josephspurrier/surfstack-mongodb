@@ -121,7 +121,7 @@ abstract class Driver
         $result = $this->dbCollection->find($query, $fields);
         
         // Set the MongoCursor options
-        $result->fields($this->fields);
+        if ($this->fields) $result->fields($this->fields);
         $result->limit($this->limit);
         $result->skip($this->skip);
         $result->sort($this->sort);
@@ -346,8 +346,10 @@ abstract class Driver
      */
     protected function setSkip($num)
     {
+        // Ignore a skip of 0 or less
+        if ($num <=  0) return false;
         // If the number is an int
-        if (is_int($num))
+        elseif (is_int($num))
         {
             $this->skip = $num;
         }
@@ -577,7 +579,7 @@ abstract class Driver
         $result = $this->gridFS->find($query, $fields);
         
         // Set the MongoCursor options
-        $result->fields($this->fields);
+        if ($this->fields) $result->fields($this->fields);
         $result->limit($this->limit);
         $result->skip($this->skip);
         $result->sort($this->sort);
