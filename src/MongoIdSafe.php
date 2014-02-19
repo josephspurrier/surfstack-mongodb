@@ -9,14 +9,14 @@ namespace SurfStack\MongoDB;
  * @see http://www.php.net/manual/en/class.mongoid.php#112598
  *
  */
-class MongoIdSafe {
-
+class MongoIdSafe
+{
     /**
      * Return a MongoID using the ID or a new MongoID if the ID is invalid
      * @param string $id
      * @return \MongoId
      */
-    public static function create($id)
+    public static function create($id = null)
     {
         try
         {
